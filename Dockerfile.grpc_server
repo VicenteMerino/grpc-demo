@@ -1,0 +1,39 @@
+FROM python:3.10
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE 1 \
+  PYTHONUNBUFFERED 1 \
+  PIP_NO_CACHE_DIR off \
+  PIP_DISABLE_PIP_VERSION_CHECK on
+
+COPY /grpc_server/pyproject.toml /app/grpc_server/pyproject.toml
+COPY /grpc_server/poetry.lock /app/grpc_server/poetry.lock
+
+RUN  curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
+  cd /usr/local/bin && \
+  ln -s /opt/poetry/bin/poetry && \
+  poetry config virtualenvs.create false
+
+
+WORKDIR /app/grpc_server
+
+RUN poetry install --no-root && cd ..
+
+
+COPY /grpc_server /app/grpc_server
+COPY /protos /app/protos
+
+
+WORKDIR /app
+RUN python3 -m grpc_tools.protoc --proto_path=protos/ \
+  --grpc_python_out=grpc_server \
+  --python_out=grpc_server \
+  --pyi_out=grpc_server \
+  protos/*.proto
+
+WORKDIR /app/grpc_server
+
+EXPOSE 50051
+
+CMD [ "python", "main.py" ]

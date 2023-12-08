@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+message Data {
+  string foo = 1;
+  int32 bar = 2;
+  bool baz = 3;
+  string hello = 4;
+  int32 world = 5;
+  bool lorem = 6;
+  string ipsum = 7;
+}
+
+message DataBatch {
+  repeated Data data = 1;
+}
+
+message Response {
+  string message = 1;
+  Data data = 2;
+}
+
+message ResponseBatch {
+  string message = 1;
+  repeated Data data = 2;
+}
+
+service Test {
+  rpc PostData(Data) returns (Response) {}
+  rpc PostDataBatch(DataBatch) returns (ResponseBatch) {}
+}
