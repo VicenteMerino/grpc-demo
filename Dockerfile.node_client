@@ -1,0 +1,14 @@
+FROM node:20
+
+WORKDIR /app
+
+COPY /node_client/package*.json /app/
+
+RUN npm install
+
+COPY /node_client /app
+COPY /protos /app/protos
+
+EXPOSE 3000
+
+CMD ["node", "index.js"]

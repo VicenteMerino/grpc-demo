@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package test;
+
 message Data {
   string foo = 1;
   int32 bar = 2;
@@ -27,4 +29,9 @@ message ResponseBatch {
 service Test {
   rpc PostData(Data) returns (Response) {}
   rpc PostDataBatch(DataBatch) returns (ResponseBatch) {}
+
+  // Stream Batch
+  rpc PostDataBatchStreamRequest(stream Data) returns (ResponseBatch) {}
+  rpc PostDataBatchStreamResponse(DataBatch) returns (stream Response) {}
+  rpc PostDataBatchStreamBoth(stream Data) returns (stream Response) {}
 }

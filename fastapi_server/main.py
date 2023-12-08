@@ -75,7 +75,7 @@ def blocking_endpoint_batch(
             d.model_dump(),
         )
     db_session.commit()
-    return {"message": "ok"}
+    return {"message": "ok", "data": data}
 
 
 @app.post("/load")
@@ -119,4 +119,4 @@ def load_data(db_session: Session = Depends(get_db_session)):
         data,
     )
     db_session.commit()
-    return {"message": "ok", "data": data}
+    return {"message": "ok"}
