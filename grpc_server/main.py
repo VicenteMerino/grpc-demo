@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
 POSTGRES_URI = os.getenv(
-    "POSTGRES_URI", "postgres://postgres:postgres@postgres:5432/postgres"
+    "POSTGRES_URI", "postgresql://postgres:postgres@postgres:5432/postgres"
 )
 QUERY = text(
     """
