@@ -11,6 +11,9 @@ load_dotenv()
 
 
 class TestServicer(test_pb2_grpc.TestServicer):
+    def Hello(self, request, context):
+        return test_pb2.Void()
+
     def PostData(self, request, context):
         data = request
         return test_pb2.Response(message="ok", data=data)
