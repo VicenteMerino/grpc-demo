@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package test;
 
-message Void {}
-
 message Data {
   string foo = 1;
   int32 bar = 2;
@@ -19,22 +17,30 @@ message DataBatch {
 }
 
 message Response {
-  string message = 1;
-  Data data = 2;
+  Data data = 1;
 }
 
 message ResponseBatch {
-  string message = 1;
-  repeated Data data = 2;
+  repeated Data data = 1;
 }
 
 service Test {
-  rpc Hello(Void) returns (Void) {}
-  rpc PostData(Data) returns (Response) {}
   rpc PostDataBatch(DataBatch) returns (ResponseBatch) {}
-
   // Stream Batch
   rpc PostDataBatchStreamRequest(stream Data) returns (ResponseBatch) {}
   rpc PostDataBatchStreamResponse(DataBatch) returns (stream Response) {}
   rpc PostDataBatchStreamBoth(stream Data) returns (stream Response) {}
 }
+
+
+// python3 -m grpc_tools.protoc --proto_path=protos/ \
+//   --grpc_python_out=grpc_server \
+//   --python_out=grpc_server \
+//   --pyi_out=grpc_server \
+//   protos/*.proto
+
+// python3 -m grpc_tools.protoc --proto_path=protos/ \
+//   --grpc_python_out=load-tests \
+//   --python_out=load-tests \
+//   --pyi_out=load-tests \
+//   protos/*.proto

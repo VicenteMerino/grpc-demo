@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM --platform=linux/amd64 python:3.9 as build
 
 WORKDIR /app
 
@@ -34,6 +34,5 @@ RUN python3 -m grpc_tools.protoc --proto_path=protos/ \
 
 WORKDIR /app/grpc_server
 
-EXPOSE 50051
 
-CMD [ "python", "main.py" ]
+CMD [ "python3", "main.py" ]

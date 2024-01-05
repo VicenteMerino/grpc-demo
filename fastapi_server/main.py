@@ -15,16 +15,10 @@ class Data(BaseModel):
     lorem: bool
     ipsum: str
 
-
-@app.post("/")
-def blocking_endpoint(data: Data):
-    return {"message": "ok", "data": data}
-
-
 class DataBatch(BaseModel):
     data: List[Data]
 
 
 @app.post("/batch")
 def blocking_endpoint_batch(data: DataBatch):
-    return {"message": "ok", "data": data}
+    return {"data": data}

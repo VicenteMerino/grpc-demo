@@ -1,18 +1,6 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:latest
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    ports:
-      - 5432:5432
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-
   grpc-server:
     build:
       context: .
@@ -20,10 +8,6 @@ services:
     restart: always
     ports:
       - 50051:50051
-    depends_on:
-      - postgres
-    environment:
-      - POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/postgres
 
   
   fastapi-server:
@@ -31,12 +15,10 @@ services:
         context: .
         dockerfile: Dockerfile.fastapi_server
     restart: always
-    ports:
-      - 8000:8080
-    depends_on:
-      - postgres
     environment:
-      - POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/postgres
+      - PORT=8000
+    ports:
+      - 8000:8000
 
   node-client:
     build:
@@ -45,12 +27,6 @@ services:
     restart: always
     ports:
       - 3000:3000
-    depends_on:
-      - grpc-server
-      - fastapi-server
-    environment:
-      - GRPC_URL=grpc-server:50051
-      - FASTAPI_URL=http://fastapi-server:8080
 
 volumes:
   postgres-data: null

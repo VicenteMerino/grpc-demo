@@ -3,9 +3,9 @@ const axios = require('axios');
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
-const FASTAPI_URL = process.env.FASTAPI_URL || 'http://fastapi-server:8080';
-const GRPC_URL = process.env.GRPC_URL || 'grpc-server:50051';
-const PORT = process.env.PORT || 3000;
+const FASTAPI_URL = 'http://54.176.166.95:8080';
+const GRPC_URL = '52.53.177.88:50051';
+const PORT = 3000;
 
 const PROTO_PATH = `${__dirname}/protos/test.proto`;
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {});
@@ -21,13 +21,21 @@ app.get('/', (req, res) => {
 
 app.post("/rest/single-query", async (req, res) => {
   const data = req.body;
-  await axios.post(`${FASTAPI_URL}/`, data);
+  const response = await axios.post(`${FASTAPI_URL}/`, data);
+  if (response.status !== 200) {
+    console.log(response);
+    res.status(500).send(response);
+  }
   res.send("Received from FastAPI server");
 });
 
 app.post("/rest/multi-query", async (req, res) => {
   const dataBatch = req.body;
-  await axios.post(`${FASTAPI_URL}/batch`, dataBatch);
+  const response = await axios.post(`${FASTAPI_URL}/batch`, dataBatch);
+  if (response.status !== 200) {
+    console.log(response);
+    res.status(500).send(response);
+  }
   res.send("Received from FastAPI server");
 });
 
